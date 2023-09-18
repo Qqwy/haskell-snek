@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
 import qualified Control.Concurrent
+import qualified Data.Text
 import qualified Data.Text.IO
 import qualified System.IO
 
@@ -21,6 +22,7 @@ loop input_mvar state  = do
   let state' = GameState.update new_dir state
 
   clearScreen
+  Data.Text.IO.putStrLn $ "Score: " <> Data.Text.pack (show $ GameState.score state')
   Data.Text.IO.putStr $ GameState.draw state'
 
   Control.Concurrent.threadDelay 100000
@@ -33,7 +35,7 @@ inputLoop input_mvar = do
   inputLoop input_mvar
 
 clearScreen :: IO ()
-clearScreen = Data.Text.IO.putStr "\ESC[2J"
+clearScreen = Data.Text.IO.putStrLn "\ESC[2J"
 
 readDir :: IO Direction
 readDir = do

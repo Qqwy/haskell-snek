@@ -69,11 +69,7 @@ drawRow y state = Text.pack $ do
   drawPoint (Point x y) state
 
 drawPoint :: Point -> GameState -> String
-drawPoint point state =
-    if state.food == point then
-      "O"
-    else
-      if point `elem` state.snake.body then
-        "█"
-      else
-        " "
+drawPoint point state
+  | point `elem` state.snake.body = "█"
+  | point == state.food = "O"
+  | otherwise = " "
