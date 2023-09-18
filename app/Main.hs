@@ -4,6 +4,7 @@ import qualified Control.Concurrent
 import qualified Data.Text
 import qualified Data.Text.IO
 import qualified System.IO
+import qualified System.Random
 
 import Common (Direction(..))
 import GameState (GameState)
@@ -14,7 +15,9 @@ main = do
   System.IO.hSetBuffering System.IO.stdin System.IO.NoBuffering
   input_mvar <- Control.Concurrent.newEmptyMVar
   _ <- Control.Concurrent.forkIO (inputLoop input_mvar)
-  loop input_mvar GameState.initial
+  rng <- System.Random.newStdGen
+  let initial_state = GameState.initial rng
+  loop input_mvar initial_state
 
 loop :: Control.Concurrent.MVar Direction -> GameState -> IO ()
 loop input_mvar state  = do
