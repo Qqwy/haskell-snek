@@ -7,11 +7,13 @@ data Direction = North | South | East | West
 type Point = (Word, Word)
 
 gameWidth :: Word
-gameWidth = 30
+gameWidth = 60
 
 gameHeight :: Word
 gameHeight = 30
 
+-- | Returns true for North<->South and for East<->West,
+--   false otherwise.
 isOppositeDirection :: Direction -> Direction -> Bool
 isOppositeDirection North South = True
 isOppositeDirection South North = True

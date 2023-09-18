@@ -10,7 +10,6 @@ module GameState
   where
 
 import Data.Function ((&))
-import qualified Data.Maybe
 import Data.Text (Text)
 import qualified Data.Text as Text
 import System.Random (RandomGen)
