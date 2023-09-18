@@ -24,7 +24,7 @@ import qualified Snake
 data GameState = GameState
   { snake :: !Snake
   , direction :: !Direction
-  , foods :: [Point]
+  , foods :: ![Point]
   , score :: !Int
   , gameOver :: !Bool
   }
@@ -54,25 +54,30 @@ update new_dir state =
   then state
   else
     let
-      direction' = Data.Maybe.fromMaybe state.direction new_dir
+      direction' = updateDirection new_dir state.direction
       snake' =
         state.snake
         & Snake.move direction'
-        & Snake.maybeGrow (foodEaten state)
-      foods' = if foodEaten state then tail state.foods else state.foods
-      score' = if foodEaten state then state.score + 100 else state.score + 1
+        & Snake.maybeGrow (isFoodEaten state)
+      foods' = if isFoodEaten state then tail state.foods else state.foods
+      score' = if isFoodEaten state then state.score + 100 else state.score + 1
     in
-          state
-          { snake = snake'
-          , direction = direction'
-          , gameOver = Snake.overlaps snake' || Snake.hitsWall snake'
-          , score = score'
-          , foods = foods'
-          }
+      GameState
+      { snake = snake'
+      , direction = direction'
+      , gameOver = Snake.overlaps snake' || Snake.hitsWall snake'
+      , score = score'
+      , foods = foods'
+      }
 
+updateDirection :: Maybe Direction -> Direction -> Direction
+updateDirection new_dir dir =
+  case new_dir of
+    Just new_dir' | not (Common.isOppositeDirection new_dir' dir) -> new_dir'
+    _ -> dir
 
-foodEaten :: GameState -> Bool
-foodEaten state =
+isFoodEaten :: GameState -> Bool
+isFoodEaten state =
   let food = head state.foods
   in
     food == Snake.snakeHead state.snake
@@ -97,3 +102,4 @@ drawPoint point state
   | point `elem` state.snake.body = "█"
   | point == (head state.foods) = "O"
   | otherwise = " "
+

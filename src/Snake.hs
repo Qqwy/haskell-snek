@@ -40,10 +40,11 @@ move dir snake =
     (headX, headY) = NonEmpty.head snake.body
     new_head =
       case dir of
-        North -> (,) headX (headY - 1)
-        South -> (,) headX (headY + 1)
-        East -> (,) (headX + 1) headY
-        West -> (,) (headX - 1) headY
+        North -> (headX, headY - 1)
+        South -> (headX, headY + 1)
+        East -> (headX + 1, headY)
+        West -> (headX - 1, headY)
+
 
 overlaps :: Snake -> Bool
 overlaps (Snake { body = (snake_head :| body) }) = snake_head `elem` body

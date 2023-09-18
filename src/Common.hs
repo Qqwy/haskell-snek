@@ -11,3 +11,10 @@ gameWidth = 30
 
 gameHeight :: Word
 gameHeight = 30
+
+isOppositeDirection :: Direction -> Direction -> Bool
+isOppositeDirection North South = True
+isOppositeDirection South North = True
+isOppositeDirection East West = True
+isOppositeDirection West East = True
+isOppositeDirection _ _ = False

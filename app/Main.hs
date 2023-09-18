@@ -53,3 +53,4 @@ readDir = do
     's' -> return South
     'd' -> return East
     _ -> readDir
+
