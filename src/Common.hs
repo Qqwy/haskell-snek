@@ -4,8 +4,7 @@ module Common
 data Direction = North | South | East | West
   deriving (Eq, Ord, Show, Read, Enum, Bounded)
 
-data Point = Point { x :: Word, y :: Word }
-  deriving (Eq, Ord, Show, Read)
+type Point = (Word, Word)
 
 gameWidth :: Word
 gameWidth = 30

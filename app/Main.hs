@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 module Main (main) where
 import qualified Control.Concurrent
 import qualified Data.Text
@@ -7,7 +8,7 @@ import qualified System.IO
 import qualified System.Random
 
 import Common (Direction(..))
-import GameState (GameState)
+import GameState (GameState(..))
 import qualified GameState
 
 main :: IO ()
@@ -28,8 +29,11 @@ loop input_mvar state  = do
   Data.Text.IO.putStrLn $ "Score: " <> Data.Text.pack (show $ GameState.score state')
   Data.Text.IO.putStr $ GameState.draw state'
 
-  Control.Concurrent.threadDelay 100000
-  loop input_mvar state'
+  if state.gameOver then
+    Data.Text.IO.putStrLn $ "Game Over. Final score: " <> Data.Text.pack (show $ GameState.score state')
+  else do
+      Control.Concurrent.threadDelay 100000
+      loop input_mvar state'
 
 inputLoop :: Control.Concurrent.MVar Direction -> IO ()
 inputLoop input_mvar = do
@@ -38,7 +42,7 @@ inputLoop input_mvar = do
   inputLoop input_mvar
 
 clearScreen :: IO ()
-clearScreen = Data.Text.IO.putStrLn "\ESC[2J"
+clearScreen = Data.Text.IO.putStrLn "\ESC[H\ESC[2J"
 
 readDir :: IO Direction
 readDir = do
