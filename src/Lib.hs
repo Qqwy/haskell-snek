@@ -19,10 +19,10 @@ data Point = Point { x :: Word, y :: Word }
   deriving (Eq, Ord, Show, Read, Generic)
 
 gameWidth :: Word
-gameWidth = 20
+gameWidth = 30
 
 gameHeight :: Word
-gameHeight = 20
+gameHeight = 30
 
 data GameState = GameState
   { snake :: Snake
@@ -44,7 +44,7 @@ initialState = GameState
 
 initialSnake :: Snake
 initialSnake = Snake { body = [Point (cx - 1) cy, Point cx cy, Point (cx + 1) cy]
-                     , len = 3
+                     , len = 5
                      }
   where
     cx = gameWidth `div` 2
@@ -81,3 +81,29 @@ updateState state =
 
 snakeOverlaps :: Snake -> Bool
 snakeOverlaps (Snake { body = (snake_head :| body) }) = snake_head `elem` body
+
+drawState :: GameState -> String
+drawState state = unlines $ [top] <> drawStateRows state <> [bottom]
+  where
+    top = [0..gameWidth + 2] >> "░"
+    bottom = [0..gameWidth + 2] >> "░"
+
+drawStateRows :: GameState -> [String]
+drawStateRows state = do
+  y <- [0..gameHeight]
+  return ("░" <> (drawStateRow y state) <> "░")
+
+drawStateRow :: Word -> GameState -> String
+drawStateRow y state = do
+  x <- [0..gameWidth]
+  drawStatePoint (Point x y) state
+
+drawStatePoint :: Point -> GameState -> String
+drawStatePoint point state =
+    if state.food == point then
+      "O"
+    else
+      if point `elem` state.snake.body then
+        "█"
+      else
+        " "
