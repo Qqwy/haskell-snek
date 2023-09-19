@@ -12,9 +12,11 @@ data Direction = North | South | East | West
 
 type Point = (Word, Word)
 
+-- | Width of the playe area, in characters
 gameWidth :: Word
 gameWidth = 60
 
+-- | Height of the playe area, in characters
 gameHeight :: Word
 gameHeight = 30
 

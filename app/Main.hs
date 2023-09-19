@@ -26,6 +26,7 @@ setup = do
 
   return (input_mvar, initial_state)
 
+-- | The main game loop
 loop :: MVar Direction -> GameState -> IO ()
 loop input_mvar state = do
   state' <- update input_mvar state
@@ -52,16 +53,15 @@ renderGameOver :: GameState -> IO ()
 renderGameOver state =
   Data.Text.IO.putStrLn $ "Game Over. Final score: " <> Data.Text.pack (show $ GameState.score state)
 
--- Because terminal input is blocking, we run a separate thread that waits for input.
+-- | Because terminal input is blocking, we run a separate thread that waits for input.
 inputLoop :: Control.Concurrent.MVar Direction -> IO ()
 inputLoop input_mvar = do
   dir <- readDir
   Control.Concurrent.putMVar input_mvar dir
   inputLoop input_mvar
 
-clearScreen :: IO ()
-clearScreen = Data.Text.IO.putStrLn "\ESC[H\ESC[2J"
-
+-- | Reads a direction from terminal user input.
+-- Currently supports (only) WASD.
 readDir :: IO Direction
 readDir = do
   c <- getChar
@@ -72,6 +72,15 @@ readDir = do
     'd' -> return East
     _ -> readDir
 
+-- | Clear the terminal screen using some ANSI escape codes.
+-- (It seemed overkill to add a separate dependency for this.)
+clearScreen :: IO ()
+clearScreen = Data.Text.IO.putStrLn "\ESC[H\ESC[2J"
+
+-- | The game's speed is conditional based on the player's score.
+-- Current implementations is a bit arbitrary; could be changed to make the game more fun.
+--
+-- The return value is in microseconds, to pass to [Control.Concurrent.threadDelay].
 gameSpeed :: GameState -> Int
 gameSpeed state = case state.score of
   s | s < 100 -> 200000

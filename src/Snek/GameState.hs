@@ -16,31 +16,42 @@ import Snek.Snake qualified as Snake
 import System.Random (RandomGen)
 import System.Random qualified
 
+-- | Reified state of the game
 data GameState = GameState
-  { snake :: !Snake,
+  {
+    -- | The snake
+    snake :: !Snake,
+    -- | The snake's current direction of travel
     direction :: !Direction,
+    -- | An (infinite!) list of next food locations.
+    --   The first element is visible on the screen.
     foods :: ![Point],
+    -- | The player's score
     score :: !Int,
+    -- | True if the game is over; when set to true the game will stop
     gameOver :: !Bool
   }
   deriving (Eq, Ord, Show, Read)
 
+-- | Constructs a new game state.
 initial :: (RandomGen rng) => rng -> GameState
 initial rng =
   GameState
     { snake = Snake.initial,
-      direction = North,
+      direction = West,
       foods = randomFoods rng,
       score = 0,
       gameOver = False
     }
 
+-- | Constructs an infinite list of random food locations in the play area.
 randomFoods :: (RandomGen rng) => rng -> [Point]
 randomFoods rng =
   let (px, rng') = System.Random.randomR (0, Common.gameWidth) rng
       (py, rng'') = System.Random.randomR (0, Common.gameHeight) rng'
    in (px, py) : randomFoods rng''
 
+-- | Simulates one game tick.
 update :: Maybe Direction -> GameState -> GameState
 update new_dir state =
   if gameOver state
@@ -61,17 +72,20 @@ update new_dir state =
               foods = foods'
             }
 
+-- | If the user pressed a key, the snake's direction is updated.
+--   However, the snake can never suddenly go backwards.
 updateDirection :: Maybe Direction -> Direction -> Direction
 updateDirection new_dir dir =
   case new_dir of
     Just new_dir' | not (Common.isOppositeDirection new_dir' dir) -> new_dir'
     _ -> dir
 
+-- | True iff the snake's head is on top of the food
 isFoodEaten :: GameState -> Bool
 isFoodEaten state =
-  let food = head state.foods
-   in food == Snake.snakeHead state.snake
+   head state.foods == Snake.snakeHead state.snake
 
+-- | Renders the game state as a text-based image.
 draw :: GameState -> Text
 draw state = Text.unlines $ [wall] <> drawRows state <> [wall]
   where
