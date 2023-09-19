@@ -1,16 +1,14 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedRecordDot #-}
 module Main (main) where
-import Control.Concurrent (MVar)
-import qualified Control.Concurrent
-import qualified Data.Text
-import qualified Data.Text.IO
-import qualified System.IO
-import qualified System.Random
 
-import Common (Direction(..))
-import GameState (GameState(..))
-import qualified GameState
+import Control.Concurrent (MVar)
+import Control.Concurrent qualified
+import Data.Text qualified
+import Data.Text.IO qualified
+import Snek.Common (Direction (..))
+import Snek.GameState (GameState (..))
+import Snek.GameState qualified as GameState
+import System.IO qualified
+import System.Random qualified
 
 main :: IO ()
 main = do
@@ -33,11 +31,11 @@ loop input_mvar state = do
   state' <- update input_mvar state
   render state
 
-  if state.gameOver then
-    renderGameOver state'
-  else do
-    Control.Concurrent.threadDelay (gameSpeed state')
-    loop input_mvar state'
+  if state.gameOver
+    then renderGameOver state'
+    else do
+      Control.Concurrent.threadDelay (gameSpeed state')
+      loop input_mvar state'
 
 update :: MVar Direction -> GameState -> IO GameState
 update input_mvar state = do
@@ -52,7 +50,7 @@ render state = do
 
 renderGameOver :: GameState -> IO ()
 renderGameOver state =
-    Data.Text.IO.putStrLn $ "Game Over. Final score: " <> Data.Text.pack (show $ GameState.score state)
+  Data.Text.IO.putStrLn $ "Game Over. Final score: " <> Data.Text.pack (show $ GameState.score state)
 
 -- Because terminal input is blocking, we run a separate thread that waits for input.
 inputLoop :: Control.Concurrent.MVar Direction -> IO ()

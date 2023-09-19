@@ -25,10 +25,9 @@ source-repository head
 
 library
   exposed-modules:
-      Common
-      GameState
-      Lib
-      Snake
+      Snek.Common
+      Snek.GameState
+      Snek.Snake
   other-modules:
       Paths_snek
   hs-source-dirs:

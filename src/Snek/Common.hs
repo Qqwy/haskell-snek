@@ -1,5 +1,11 @@
-module Common
-  where
+module Snek.Common
+  ( Direction (..),
+    Point,
+    gameWidth,
+    gameHeight,
+    isOppositeDirection,
+  )
+where
 
 data Direction = North | South | East | West
   deriving (Eq, Ord, Show, Read, Enum, Bounded)
