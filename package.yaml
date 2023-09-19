@@ -36,7 +36,6 @@ ghc-options:
 - -Wpartial-fields
 - -Wredundant-constraints
 - -O2
-- -ddump-simpl
 library:
   source-dirs: src
 
