@@ -39,8 +39,7 @@ library
       ImportQualifiedPost
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -O2
   build-depends:
-      array ==0.5.*
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , random ==1.2.*
     , text >=2.0 && <3
   default-language: Haskell2010
@@ -56,8 +55,7 @@ executable snek-exe
       ImportQualifiedPost
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      array ==0.5.*
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , random ==1.2.*
     , snek
     , text >=2.0 && <3
@@ -77,8 +75,7 @@ test-suite snek-test
       ImportQualifiedPost
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      array ==0.5.*
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , random ==1.2.*
     , snek
     , text >=2.0 && <3
